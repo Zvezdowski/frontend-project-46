@@ -2,10 +2,12 @@ import * as fs from 'node:fs';
 import path from 'path';
 import _ from 'lodash';
 
-const getAbsolutePath = (pathToFile) => path.resolve(process.cwd(), pathToFile);
-const readFile = (pathToFile) => fs.readFileSync(pathToFile);
-const parseJson = (json) => JSON.parse(json);
-const parseJsonFromPath = (pathToFile) => parseJson(readFile(getAbsolutePath(pathToFile)));
+const parseJsonFromPath = (pathToFile) => {
+  const absolutePath = path.resolve(process.cwd(), pathToFile);
+  const fileData = fs.readFileSync(absolutePath);
+  const obj = JSON.parse(fileData);
+  return obj;
+};
 
 const getUniqueKeys = (obj1, obj2) => {
   const obj1Keys = Object.keys(obj1);

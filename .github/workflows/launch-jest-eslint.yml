@@ -1,8 +1,9 @@
-name: hello-world
+name: launch-jest-eslint
 on: push
 jobs:
   build:
     runs-on: ubuntu-latest
     steps: 
       - uses: actions/checkout@v3
-      - run: make say-hello
+      - run: make lint
+      - run: make jest
