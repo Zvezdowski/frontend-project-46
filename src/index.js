@@ -1,5 +1,5 @@
-import * as fs from 'node:fs';
 import path from 'path';
+import * as fs from 'node:fs';
 import _ from 'lodash';
 
 const parseJsonFromPath = (pathToFile) => {
