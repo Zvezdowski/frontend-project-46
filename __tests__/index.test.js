@@ -1,9 +1,4 @@
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-import { genDiff, parseJsonFromPath } from '../src/index.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import { genDiff } from '../src/index.js';
 
 test('genDiff', () => {
   expect(genDiff({ banana: 1, apple: 'delicious' }, { banana: 1, apple: 'delicious' })).toBe('{\n    apple: delicious\n    banana: 1\n}');
@@ -12,9 +7,4 @@ test('genDiff', () => {
   expect(genDiff({ apple: 'delicious' }, { banana: 1, apple: 'delicious' })).toBe('{\n    apple: delicious\n  + banana: 1\n}');
   expect(genDiff({}, { banana: 1, apple: 'delicious' })).toBe('{\n  + apple: delicious\n  + banana: 1\n}');
   expect(genDiff({ banana: 1, apple: 'delicious' }, {})).toBe('{\n  - apple: delicious\n  - banana: 1\n}');
-});
-
-test('parseJsonFromPath', () => {
-  const fileName = 'blank.json';
-  expect(parseJsonFromPath(`${__dirname}/../__fixtures__/${fileName}`)).toStrictEqual({ banana: 1, apple: 'delicious' });
 });

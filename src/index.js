@@ -1,13 +1,4 @@
-import path from 'path';
-import * as fs from 'node:fs';
 import _ from 'lodash';
-
-const parseJsonFromPath = (pathToFile) => {
-  const absolutePath = path.resolve(process.cwd(), pathToFile);
-  const fileData = fs.readFileSync(absolutePath);
-  const obj = JSON.parse(fileData);
-  return obj;
-};
 
 const getUniqueKeys = (obj1, obj2) => {
   const obj1Keys = Object.keys(obj1);
@@ -37,4 +28,4 @@ const genDiff = (obj1, obj2) => {
   return diff;
 };
 
-export { parseJsonFromPath, genDiff };
+export { genDiff };
