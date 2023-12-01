@@ -8,5 +8,8 @@
 ### Github Actions CI status:
 [![Node CI](https://github.com/Zvezdowski/frontend-project-46/actions/workflows/nodejs.yml/badge.svg)](https://github.com/Zvezdowski/frontend-project-46/actions)
 
-### Demo of gendiff utility:
+### Demo of gendiff utility with JSON:
 [![asciicast](https://asciinema.org/a/uXIT0dEVVz7qkfoU4u9xnhvf6.svg)](https://asciinema.org/a/uXIT0dEVVz7qkfoU4u9xnhvf6)
+
+### Demo of gendiff utility with YAML:
+[![asciicast](https://asciinema.org/a/WjmGgq6BzQI8ZwsGwszxpJbXt.svg)](https://asciinema.org/a/WjmGgq6BzQI8ZwsGwszxpJbXt)
