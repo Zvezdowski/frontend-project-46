@@ -1,4 +1,6 @@
 import _ from 'lodash';
+import { __dirname } from './utils.js';
+import parseFile from './parsers.js';
 
 const getUniqueKeys = (obj1, obj2) => {
   const obj1Keys = Object.keys(obj1);
@@ -8,7 +10,9 @@ const getUniqueKeys = (obj1, obj2) => {
   return uniqueKeys.sort();
 };
 
-const genDiff = (obj1, obj2) => {
+const genDiff = (filepath1, filepath2) => {
+  const obj1 = parseFile(filepath1);
+  const obj2 = parseFile(filepath2);
   const uniqueKeys = getUniqueKeys(obj1, obj2);
   const changes = uniqueKeys.reduce((acc, key) => {
     const newAcc = acc;
@@ -28,4 +32,6 @@ const genDiff = (obj1, obj2) => {
   return diff;
 };
 
-export { genDiff };
+const getFixturePath = (fixtureName) => (`${__dirname}/../__fixtures__/${fixtureName}`);
+
+export { genDiff, getFixturePath };

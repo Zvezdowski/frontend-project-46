@@ -3,8 +3,8 @@ import fs from 'fs';
 import _ from 'lodash';
 import yaml from 'js-yaml';
 
-const getExtention = (file) => {
-  const extention = _.last(file.split('.'));
+const getExtention = (filepath) => {
+  const extention = _.last(filepath.toString().split('.'));
   if (extention === 'yaml') {
     return 'yml';
   }
@@ -35,4 +35,4 @@ const parseFile = (pathToFile) => {
   }
 };
 
-export { parseFile };
+export default parseFile;
