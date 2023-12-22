@@ -13,3 +13,6 @@
 
 ### Demo of gendiff utility with YAML:
 [![asciicast](https://asciinema.org/a/WjmGgq6BzQI8ZwsGwszxpJbXt.svg)](https://asciinema.org/a/WjmGgq6BzQI8ZwsGwszxpJbXt)
+
+### Demo of gendiff utility with nested YAML and JSON
+[![asciicast](https://asciinema.org/a/pzXAUfhcCsuPm0jmK6bW3Xt1M.svg)](https://asciinema.org/a/pzXAUfhcCsuPm0jmK6bW3Xt1M)

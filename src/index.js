@@ -113,12 +113,16 @@ const formatByStylish = (diffStructure) => {
   return result;
 };
 
-const genDiff = (filepath1, filepath2) => {
+const genDiff = (filepath1, filepath2, format = 'stylish') => {
   const obj1 = parseFile(filepath1);
   const obj2 = parseFile(filepath2);
   const diffStructure = compareObjects(obj1, obj2);
-  const result = formatByStylish(diffStructure);
-  return result;
+  switch (format) {
+    case 'stylish':
+      return formatByStylish(diffStructure);
+    default:
+      throw new Error('Unknown format');
+  }
 };
 
 export { genDiff, getFixturePath, formatByStylish };
