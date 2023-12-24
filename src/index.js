@@ -1,6 +1,11 @@
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 import _ from 'lodash';
-import { __dirname } from './utils.js';
 import parseFile from './parsers.js';
+import formatByPlain from './formatters/plainFormatter.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const getFixturePath = (fixtureName) => (`${__dirname}/../__fixtures__/${fixtureName}`);
 
@@ -42,13 +47,17 @@ const printValue = (object, depth) => {
   return result;
 };
 
-const makeProp = (key, condition, mainValue, additionalValue = undefined) => ({
-  key, condition, mainValue, additionalValue,
-});
+const makeProp = (key, condition, mainValue, additionalValue = undefined) => {
+  const prop = { key, condition, mainValue };
+  if (additionalValue !== undefined) {
+    prop.additionalValue = additionalValue;
+  }
+  return prop;
+};
 
 const getProps = (diffStructure) => (diffStructure.props);
 
-const compareObjects = (obj1, obj2) => {
+const genStructureOfDiff = (obj1, obj2) => {
   const uniqueKeys = getUniqueKeys(obj1, obj2);
   const props = uniqueKeys.reduce((acc, key) => {
     const newAcc = acc;
@@ -59,7 +68,7 @@ const compareObjects = (obj1, obj2) => {
     } else if (obj1[key] === obj2[key]) {
       newAcc.push(makeProp(key, 'unchanged', obj1[key]));
     } else if (isObject(obj1[key]) && isObject(obj2[key])) {
-      newAcc.push(makeProp(key, 'nested', compareObjects(obj1[key], obj2[key])));
+      newAcc.push(makeProp(key, 'nested', genStructureOfDiff(obj1[key], obj2[key])));
     } else {
       newAcc.push(makeProp(key, 'modified', obj1[key], obj2[key]));
     }
@@ -112,18 +121,20 @@ const formatByStylish = (diffStructure) => {
   return iter(diffStructure, 1);
 };
 
-const genDiff = (filepath1, filepath2, format = 'stylish') => {
+const genDiff = (filepath1, filepath2, style = 'stylish') => {
   const obj1 = parseFile(filepath1);
   const obj2 = parseFile(filepath2);
-  const diffStructure = compareObjects(obj1, obj2);
-  switch (format) {
+  const diffStructure = genStructureOfDiff(obj1, obj2);
+  switch (style) {
     case 'stylish':
       return formatByStylish(diffStructure);
+    case 'plain':
+      return formatByPlain(diffStructure);
     default:
-      throw new Error('Unknown format');
+      throw new Error('Unknown formatter style');
   }
 };
 
 export {
-  genDiff, getFixturePath, compareObjects, formatByStylish,
+  genDiff, getFixturePath, genStructureOfDiff, formatByStylish,
 };

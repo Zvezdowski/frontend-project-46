@@ -1,10 +1,16 @@
+import fs from 'fs';
 import {
-  genDiff, getFixturePath, formatByStylish, compareObjects,
+  genDiff, getFixturePath, formatByStylish, genStructureOfDiff,
 } from '../src/index.js';
 import { result2 } from '../__fixtures__/result.js';
 import result from '../__fixtures__/nested/result.js';
 
-test('genDiff on flat', () => {
+test('genDiff plain format on nested', () => {
+  const defaultResult = fs.readFileSync(getFixturePath('nested/plainFormatter/defaultResult.txt')).toString().slice(0, -1);
+  expect(genDiff(getFixturePath('nested/file1.yaml'), getFixturePath('nested/file2.yaml'), 'plain')).toBe(defaultResult);
+});
+
+test('genDiff stylish format on flat', () => {
   expect(genDiff(getFixturePath('terminalCases/before1.json'), getFixturePath('terminalCases/after1.json'))).toBe('{\n    apple: delicious\n    banana: 1\n}');
   expect(genDiff(getFixturePath('terminalCases/before2.json'), getFixturePath('terminalCases/after2.json'))).toBe('{\n  - apple: delicious\n  + apple: fresh\n    banana: 1\n}');
   expect(genDiff(getFixturePath('terminalCases/before3.json'), getFixturePath('terminalCases/after3.json'))).toBe('{\n    apple: delicious\n  - banana: 1\n}');
@@ -15,7 +21,7 @@ test('genDiff on flat', () => {
   expect(genDiff(getFixturePath('before.yaml'), getFixturePath('after.yml'))).toBe(result2);
 });
 
-test('genDiff on nested', () => {
+test('genDiff stylish format on nested', () => {
   expect(genDiff(getFixturePath('nested/file1.json'), getFixturePath('nested/file2.json'))).toStrictEqual(result);
   expect(genDiff(getFixturePath('nested/file1.yaml'), getFixturePath('nested/file2.yaml'))).toStrictEqual(result);
 });
@@ -25,7 +31,7 @@ test('Throw error test on genDiff', () => {
 });
 
 test('Format by stylish', () => {
-  expect(formatByStylish(compareObjects({
+  expect(formatByStylish(genStructureOfDiff({
     team: 'Chicago Bulls',
     coach: 'Phil Jackson',
     year: '1991 - 1992',
