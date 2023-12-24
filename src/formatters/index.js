@@ -1,20 +1,15 @@
-const getProps = (diffStructure) => (diffStructure.props);
+import formatByPlain from './plainFormatter.js';
+import formatByStylish from './stylishFormatter.js';
 
-const getCondition = (prop) => (prop.condition);
-
-const getKey = (prop) => (prop.key);
-
-const getMainValue = (prop) => (prop.mainValue);
-
-const getAdditionalValue = (prop) => (prop.additionalValue);
-
-const isObject = (value) => {
-  if (typeof value === 'object' && !Array.isArray(value) && value !== null) {
-    return true;
+const getFormatterByStyle = (style) => {
+  switch (style) {
+    case 'stylish':
+      return formatByStylish;
+    case 'plain':
+      return formatByPlain;
+    default:
+      throw new Error('Unknown style formatter');
   }
-  return false;
 };
 
-export {
-  getProps, getCondition, getKey, getMainValue, getAdditionalValue, isObject,
-};
+export default getFormatterByStyle;

@@ -1,12 +1,14 @@
 import {
   getProps, getCondition, getKey, getMainValue, getAdditionalValue, isObject,
-} from './index.js';
+} from '../utils.js';
 
 const genPathOfProp = (existingPath, newKey) => ([existingPath, newKey].filter((element) => element !== '').join('.'));
 
+const isDiffStructure = (value) => (Object.hasOwn(value, 'props'));
+
 const normalizeValue = (value) => {
   const rawValue = typeof value === 'string' ? `'${value}'` : value;
-  const normalizedValue = isObject(rawValue) && !Object.hasOwn(rawValue, 'props') ? '[complex value]' : rawValue;
+  const normalizedValue = isObject(rawValue) && !isDiffStructure(value) ? '[complex value]' : rawValue;
   return normalizedValue;
 };
 
@@ -17,7 +19,6 @@ const formatByPlain = (diffStructure) => {
       const newAcc = acc;
       const condition = getCondition(prop);
       const value = normalizeValue(getMainValue(prop));
-      console.log('value: ', value);
       const key = getKey(prop);
       const path = genPathOfProp(pathOfProp, key);
       if (condition === 'added') {

@@ -2,7 +2,8 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import _ from 'lodash';
 import parseFile from './parsers.js';
-import formatByPlain from './formatters/plainFormatter.js';
+import getFormatterByStyle from './formatters/index.js';
+import { isObject } from './utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -19,34 +20,6 @@ const getUniqueKeys = (obj1, obj2) => {
 
 const makeStructureOfDiff = (props) => ({ props });
 
-const getCondition = (prop) => (prop.condition);
-
-const getKey = (prop) => (prop.key);
-
-const isObject = (value) => {
-  if (typeof value === 'object' && !Array.isArray(value) && value !== null) {
-    return true;
-  }
-  return false;
-};
-
-const makeIndent = (depth, specialChar) => {
-  const space = ' ';
-  const indent = `${space.repeat(4 * depth - 2)}${specialChar}${space}`;
-  return indent;
-};
-
-const printValue = (object, depth) => {
-  if (!isObject(object)) {
-    return object;
-  }
-  const keys = Object.keys(object);
-  const indent = '    ';
-  const lines = keys.map((key) => (`${indent.repeat(depth)}${key}: ${printValue(object[key], depth + 1)}`));
-  const result = `{\n${lines.join('\n')}\n${indent.repeat(depth - 1)}}`;
-  return result;
-};
-
 const makeProp = (key, condition, mainValue, additionalValue = undefined) => {
   const prop = { key, condition, mainValue };
   if (additionalValue !== undefined) {
@@ -54,8 +27,6 @@ const makeProp = (key, condition, mainValue, additionalValue = undefined) => {
   }
   return prop;
 };
-
-const getProps = (diffStructure) => (diffStructure.props);
 
 const genStructureOfDiff = (obj1, obj2) => {
   const uniqueKeys = getUniqueKeys(obj1, obj2);
@@ -78,63 +49,14 @@ const genStructureOfDiff = (obj1, obj2) => {
   return structureOfDiff;
 };
 
-const getMainValue = (prop) => (prop.mainValue);
-
-const getAdditionalValue = (prop) => (prop.additionalValue);
-
-const getMainSpecialChar = (condition) => {
-  let specialChar;
-  if (condition === 'added') {
-    specialChar = '+';
-  } else if (condition === 'removed' || condition === 'modified') {
-    specialChar = '-';
-  } else if (condition === 'unchanged' || condition === 'nested') {
-    specialChar = ' ';
-  }
-  return specialChar;
-};
-
-const getAdditionalSpecialChar = () => ('+');
-
-const formatByStylish = (diffStructure) => {
-  const iter = (structure, depth) => {
-    const props = getProps(structure);
-    const lines = props.reduce((acc, prop) => {
-      const newAcc = acc;
-      const condition = getCondition(prop);
-      const key = getKey(prop);
-      const specialChar = getMainSpecialChar(condition);
-      const indent = makeIndent(depth, specialChar);
-      const mainValue = getMainValue(prop);
-      if (condition === 'added' || condition === 'removed' || condition === 'unchanged') {
-        newAcc.push(`${indent}${key}: ${printValue(mainValue, depth + 1)}`);
-      } else if (condition === 'modified') {
-        newAcc.push(`${indent}${key}: ${printValue(mainValue, depth + 1)}`);
-        newAcc.push(`${makeIndent(depth, getAdditionalSpecialChar())}${key}: ${printValue(getAdditionalValue(prop), depth + 1)}`);
-      } else if (condition === 'nested') {
-        newAcc.push(`${indent}${key}: ${iter(mainValue, depth + 1)}`);
-      }
-      return newAcc;
-    }, []);
-    return `{\n${lines.join('\n')}\n${'    '.repeat(depth - 1)}}`;
-  };
-  return iter(diffStructure, 1);
-};
-
 const genDiff = (filepath1, filepath2, style = 'stylish') => {
   const obj1 = parseFile(filepath1);
   const obj2 = parseFile(filepath2);
   const diffStructure = genStructureOfDiff(obj1, obj2);
-  switch (style) {
-    case 'stylish':
-      return formatByStylish(diffStructure);
-    case 'plain':
-      return formatByPlain(diffStructure);
-    default:
-      throw new Error('Unknown formatter style');
-  }
+  const formatByStyle = getFormatterByStyle(style);
+  return formatByStyle(diffStructure);
 };
 
 export {
-  genDiff, getFixturePath, genStructureOfDiff, formatByStylish,
+  genDiff, getFixturePath, genStructureOfDiff, getFormatterByStyle,
 };

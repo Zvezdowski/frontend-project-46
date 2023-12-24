@@ -1,7 +1,20 @@
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
+const getProps = (diffStructure) => (diffStructure.props);
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const getCondition = (prop) => (prop.condition);
 
-export { __filename, __dirname };
+const getKey = (prop) => (prop.key);
+
+const getMainValue = (prop) => (prop.mainValue);
+
+const getAdditionalValue = (prop) => (prop.additionalValue);
+
+const isObject = (value) => {
+  if (typeof value === 'object' && !Array.isArray(value) && value !== null) {
+    return true;
+  }
+  return false;
+};
+
+export {
+  getProps, getCondition, getKey, getMainValue, getAdditionalValue, isObject,
+};
