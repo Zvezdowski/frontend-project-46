@@ -61,7 +61,6 @@ const formatByJson = (diffStructure) => {
   };
 
   const result = iter(diffStructure, 1);
-  console.log(result);
   return result;
 };
 

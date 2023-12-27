@@ -1,3 +1,17 @@
+### Difference generator utility
+Generates difference between two structures. 
+Stylish, Plain and Json output formats avialable.
+Supports JSON and YAML input file extentions.
+
+### How to install:
+
+`git clone https://github.com/Zvezdowski/frontend-project-46.git`
+
+`make install`
+
+### system requiirements
+node.js: v20.7.0
+
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/Zvezdowski/frontend-project-46/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/Zvezdowski/frontend-project-46/actions)
 
