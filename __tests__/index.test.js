@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { genDiff, getFixturePath, genStructureOfDiff } from '../src/index.js';
+import genDiff, { getFixturePath, genStructureOfDiff } from '../src/index.js';
 import formatByStylish from '../src/formatters/stylishFormatter.js';
 import result from '../__fixtures__/nested/result.js';
 
