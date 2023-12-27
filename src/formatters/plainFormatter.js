@@ -16,22 +16,28 @@ const formatByPlain = (diffStructure) => {
   const iter = (structure, pathOfProp) => {
     const props = getProps(structure);
     const lines = props.reduce((acc, prop) => {
-      const newAcc = acc;
       const condition = getCondition(prop);
       const value = normalizeValue(getMainValue(prop));
       const key = getKey(prop);
       const path = genPathOfProp(pathOfProp, key);
       if (condition === 'added') {
-        newAcc.push(`Property '${path}' was added with value: ${value}`);
-      } else if (condition === 'removed') {
-        newAcc.push(`Property '${path}' was removed`);
-      } else if (condition === 'modified') {
-        const additionalValue = normalizeValue(getAdditionalValue(prop));
-        newAcc.push(`Property '${path}' was updated. From ${value} to ${additionalValue}`);
-      } else if (condition === 'nested') {
-        newAcc.push(iter(value, path));
+        const line = `Property '${path}' was added with value: ${value}`;
+        return [...acc, line];
       }
-      return newAcc;
+      if (condition === 'removed') {
+        const line = `Property '${path}' was removed`;
+        return [...acc, line];
+      }
+      if (condition === 'modified') {
+        const additionalValue = normalizeValue(getAdditionalValue(prop));
+        const line = `Property '${path}' was updated. From ${value} to ${additionalValue}`;
+        return [...acc, line];
+      }
+      if (condition === 'nested') {
+        const line = iter(value, path);
+        return [...acc, line];
+      }
+      return [...acc];
     }, []);
     const result = lines.flat().join('\n');
     return result;

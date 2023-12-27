@@ -3,15 +3,13 @@ import {
 } from '../utils.js';
 
 const getMainSpecialChar = (condition) => {
-  let specialChar;
   if (condition === 'added') {
-    specialChar = '+';
-  } else if (condition === 'removed' || condition === 'modified') {
-    specialChar = '-';
-  } else if (condition === 'unchanged' || condition === 'nested') {
-    specialChar = ' ';
+    return '+';
   }
-  return specialChar;
+  if (condition === 'removed' || condition === 'modified') {
+    return '-';
+  }
+  return ' ';
 };
 
 const getAdditionalSpecialChar = () => ('+');
@@ -37,21 +35,23 @@ const formatByStylish = (diffStructure) => {
   const iter = (structure, depth) => {
     const props = getProps(structure);
     const lines = props.reduce((acc, prop) => {
-      const newAcc = acc;
       const condition = getCondition(prop);
       const key = getKey(prop);
       const specialChar = getMainSpecialChar(condition);
       const indent = makeIndent(depth, specialChar);
       const mainValue = getMainValue(prop);
       if (condition === 'added' || condition === 'removed' || condition === 'unchanged') {
-        newAcc.push(`${indent}${key}: ${printValue(mainValue, depth + 1)}`);
-      } else if (condition === 'modified') {
-        newAcc.push(`${indent}${key}: ${printValue(mainValue, depth + 1)}`);
-        newAcc.push(`${makeIndent(depth, getAdditionalSpecialChar())}${key}: ${printValue(getAdditionalValue(prop), depth + 1)}`);
-      } else if (condition === 'nested') {
-        newAcc.push(`${indent}${key}: ${iter(mainValue, depth + 1)}`);
+        const line = `${indent}${key}: ${printValue(mainValue, depth + 1)}`;
+        return [...acc, line];
       }
-      return newAcc;
+      if (condition === 'modified') {
+        const lineOfBefore = `${indent}${key}: ${printValue(mainValue, depth + 1)}`;
+        const lineOfAfter = `${makeIndent(depth, getAdditionalSpecialChar())}${key}: ${printValue(getAdditionalValue(prop), depth + 1)}`;
+        return [...acc, lineOfBefore, lineOfAfter];
+      }
+
+      const line = `${indent}${key}: ${iter(mainValue, depth + 1)}`;
+      return [...acc, line];
     }, []);
     return `{\n${lines.join('\n')}\n${'    '.repeat(depth - 1)}}`;
   };

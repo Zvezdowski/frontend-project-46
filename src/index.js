@@ -15,35 +15,42 @@ const getUniqueKeys = (obj1, obj2) => {
   const obj2Keys = Object.keys(obj2);
   const commonKeys = [...obj1Keys, ...obj2Keys];
   const uniqueKeys = _.uniq(commonKeys);
-  return uniqueKeys.sort();
+  const sortedKeys = _.sortBy(uniqueKeys);
+  return sortedKeys;
 };
 
 const makeStructureOfDiff = (props) => ({ props });
 
 const makeProp = (key, condition, mainValue, additionalValue = undefined) => {
-  const prop = { key, condition, mainValue };
   if (additionalValue !== undefined) {
-    prop.additionalValue = additionalValue;
+    return {
+      key, condition, mainValue, additionalValue,
+    };
   }
-  return prop;
+  return { key, condition, mainValue };
 };
 
 const genStructureOfDiff = (obj1, obj2) => {
   const uniqueKeys = getUniqueKeys(obj1, obj2);
   const props = uniqueKeys.reduce((acc, key) => {
-    const newAcc = acc;
     if (!Object.hasOwn(obj1, key)) {
-      newAcc.push(makeProp(key, 'added', obj2[key]));
-    } else if (!Object.hasOwn(obj2, key)) {
-      newAcc.push(makeProp(key, 'removed', obj1[key]));
-    } else if (obj1[key] === obj2[key]) {
-      newAcc.push(makeProp(key, 'unchanged', obj1[key]));
-    } else if (isObject(obj1[key]) && isObject(obj2[key])) {
-      newAcc.push(makeProp(key, 'nested', genStructureOfDiff(obj1[key], obj2[key])));
-    } else {
-      newAcc.push(makeProp(key, 'modified', obj1[key], obj2[key]));
+      const prop = makeProp(key, 'added', obj2[key]);
+      return [...acc, prop];
     }
-    return newAcc;
+    if (!Object.hasOwn(obj2, key)) {
+      const prop = makeProp(key, 'removed', obj1[key]);
+      return [...acc, prop];
+    }
+    if (obj1[key] === obj2[key]) {
+      const prop = makeProp(key, 'unchanged', obj1[key]);
+      return [...acc, prop];
+    }
+    if (isObject(obj1[key]) && isObject(obj2[key])) {
+      const prop = makeProp(key, 'nested', genStructureOfDiff(obj1[key], obj2[key]));
+      return [...acc, prop];
+    }
+    const prop = makeProp(key, 'modified', obj1[key], obj2[key]);
+    return [...acc, prop];
   }, []);
   const structureOfDiff = makeStructureOfDiff(props);
   return structureOfDiff;
