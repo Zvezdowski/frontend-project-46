@@ -21,20 +21,21 @@ const formatByPlain = (diffStructure) => {
       const value = normalizeValue(getMainValue(child));
       const key = getKey(child);
       const path = genPathOfProp(pathOfProp, key);
-      if (type === 'added') {
-        return `Property '${path}' was added with value: ${value}`;
+      const additionalValue = type === 'modified' ? normalizeValue(getAdditionalValue(child)) : undefined;
+      switch (type) {
+        case 'added':
+          return `Property '${path}' was added with value: ${value}`;
+        case 'removed':
+          return `Property '${path}' was removed`;
+        case 'modified':
+          return `Property '${path}' was updated. From ${value} to ${additionalValue}`;
+        case 'parent':
+          return iter(value, path);
+        case 'unchanged':
+          return '';
+        default:
+          throw new Error('Unknown type');
       }
-      if (type === 'removed') {
-        return `Property '${path}' was removed`;
-      }
-      if (type === 'modified') {
-        const additionalValue = normalizeValue(getAdditionalValue(child));
-        return `Property '${path}' was updated. From ${value} to ${additionalValue}`;
-      }
-      if (type === 'parent') {
-        return iter(value, path);
-      }
-      return '';
     });
     const sortedLines = _.filter(lines, (line) => (line !== ''));
     const result = sortedLines.flat().join('\n');
