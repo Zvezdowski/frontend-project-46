@@ -18,10 +18,3 @@ test('parse JSON', () => {
   const fixturePath = 'parsersFixtures/parserFixture.json';
   expect(parseFile(getFixturePath(fixturePath))).toStrictEqual(result);
 });
-
-test('Switch default', () => {
-  const fixtureName = 'parsersFixtures/throw.error';
-  expect(() => {
-    parseFile(getFixturePath(fixtureName));
-  }).toThrow(new Error('Unknown extention'));
-});

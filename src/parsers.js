@@ -25,14 +25,10 @@ const parseFile = (pathToFile) => {
   const extention = getExtention(pathToFile);
   const absolutePath = path.resolve(process.cwd(), pathToFile);
   const fileData = fs.readFileSync(absolutePath);
-  switch (extention) {
-    case 'json':
-      return parseJson(fileData);
-    case 'yml':
-      return parseYaml(fileData);
-    default:
-      throw new Error('Unknown extention');
+  if (extention === 'json') {
+    return parseJson(fileData);
   }
+  return parseYaml(fileData);
 };
 
 export default parseFile;
