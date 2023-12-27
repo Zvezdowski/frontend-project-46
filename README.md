@@ -1,5 +1,5 @@
 ### Difference generator utility
-Generates difference between two structures. 
+Generates the difference between two structures.
 Stylish, Plain and Json output formats avialable.
 Supports JSON and YAML input file extentions.
 
