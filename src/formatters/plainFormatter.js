@@ -21,14 +21,13 @@ const formatByPlain = (diffStructure) => {
       const value = normalizeValue(getMainValue(child));
       const key = getKey(child);
       const path = genPathOfProp(pathOfProp, key);
-      const additionalValue = type === 'modified' ? normalizeValue(getAdditionalValue(child)) : undefined;
       switch (type) {
         case 'added':
           return `Property '${path}' was added with value: ${value}`;
         case 'removed':
           return `Property '${path}' was removed`;
         case 'modified':
-          return `Property '${path}' was updated. From ${value} to ${additionalValue}`;
+          return `Property '${path}' was updated. From ${value} to ${normalizeValue(getAdditionalValue(child))}`;
         case 'parent':
           return iter(value, path);
         case 'unchanged':
@@ -38,10 +37,8 @@ const formatByPlain = (diffStructure) => {
       }
     });
     const sortedLines = _.filter(lines, (line) => (line !== ''));
-    const result = sortedLines.flat().join('\n');
-    return result;
+    return sortedLines.flat().join('\n');
   };
-
   return iter(diffStructure, '');
 };
 
