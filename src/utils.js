@@ -1,12 +1,12 @@
-const getProps = (diffStructure) => (diffStructure.props);
+const getChildren = (diffStructure) => (diffStructure.children);
 
-const getCondition = (prop) => (prop.condition);
+const getType = (child) => (child.type);
 
-const getKey = (prop) => (prop.key);
+const getKey = (child) => (child.key);
 
-const getMainValue = (prop) => (prop.mainValue);
+const getMainValue = (child) => (child.mainValue);
 
-const getAdditionalValue = (prop) => (prop.additionalValue);
+const getAdditionalValue = (child) => (child.additionalValue);
 
 const isObject = (value) => {
   if (typeof value === 'object' && !Array.isArray(value) && value !== null) {
@@ -16,5 +16,5 @@ const isObject = (value) => {
 };
 
 export {
-  getProps, getCondition, getKey, getMainValue, getAdditionalValue, isObject,
+  getChildren, getType, getKey, getMainValue, getAdditionalValue, isObject,
 };

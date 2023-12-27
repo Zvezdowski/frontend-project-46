@@ -1,12 +1,12 @@
 import {
-  getProps, getCondition, getKey, getMainValue, getAdditionalValue, isObject,
+  getChildren, getType, getKey, getMainValue, getAdditionalValue, isObject,
 } from '../utils.js';
 
-const getMainSpecialChar = (condition) => {
-  if (condition === 'added') {
+const getMainSpecialChar = (type) => {
+  if (type === 'added') {
     return '+';
   }
-  if (condition === 'removed' || condition === 'modified') {
+  if (type === 'removed' || type === 'modified') {
     return '-';
   }
   return ' ';
@@ -33,20 +33,20 @@ const makeIndent = (depth, specialChar) => {
 
 const formatByStylish = (diffStructure) => {
   const iter = (structure, depth) => {
-    const props = getProps(structure);
-    const lines = props.reduce((acc, prop) => {
-      const condition = getCondition(prop);
-      const key = getKey(prop);
-      const specialChar = getMainSpecialChar(condition);
+    const children = getChildren(structure);
+    const lines = children.reduce((acc, child) => {
+      const type = getType(child);
+      const key = getKey(child);
+      const specialChar = getMainSpecialChar(type);
       const indent = makeIndent(depth, specialChar);
-      const mainValue = getMainValue(prop);
-      if (condition === 'added' || condition === 'removed' || condition === 'unchanged') {
+      const mainValue = getMainValue(child);
+      if (type === 'added' || type === 'removed' || type === 'unchanged') {
         const line = `${indent}${key}: ${printValue(mainValue, depth + 1)}`;
         return [...acc, line];
       }
-      if (condition === 'modified') {
+      if (type === 'modified') {
         const lineOfBefore = `${indent}${key}: ${printValue(mainValue, depth + 1)}`;
-        const lineOfAfter = `${makeIndent(depth, getAdditionalSpecialChar())}${key}: ${printValue(getAdditionalValue(prop), depth + 1)}`;
+        const lineOfAfter = `${makeIndent(depth, getAdditionalSpecialChar())}${key}: ${printValue(getAdditionalValue(child), depth + 1)}`;
         return [...acc, lineOfBefore, lineOfAfter];
       }
 

@@ -1,10 +1,11 @@
+import _ from 'lodash';
 import {
-  getProps, getCondition, getKey, getMainValue, getAdditionalValue, isObject,
+  getChildren, getType, getKey, getMainValue, getAdditionalValue, isObject,
 } from '../utils.js';
 
 const genPathOfProp = (existingPath, newKey) => ([existingPath, newKey].filter((element) => element !== '').join('.'));
 
-const isDiffStructure = (value) => (Object.hasOwn(value, 'props'));
+const isDiffStructure = (value) => (Object.hasOwn(value, 'children'));
 
 const normalizeValue = (value) => {
   const rawValue = typeof value === 'string' ? `'${value}'` : value;
@@ -14,32 +15,29 @@ const normalizeValue = (value) => {
 
 const formatByPlain = (diffStructure) => {
   const iter = (structure, pathOfProp) => {
-    const props = getProps(structure);
-    const lines = props.reduce((acc, prop) => {
-      const condition = getCondition(prop);
-      const value = normalizeValue(getMainValue(prop));
-      const key = getKey(prop);
+    const children = getChildren(structure);
+    const lines = children.map((child) => {
+      const type = getType(child);
+      const value = normalizeValue(getMainValue(child));
+      const key = getKey(child);
       const path = genPathOfProp(pathOfProp, key);
-      if (condition === 'added') {
-        const line = `Property '${path}' was added with value: ${value}`;
-        return [...acc, line];
+      if (type === 'added') {
+        return `Property '${path}' was added with value: ${value}`;
       }
-      if (condition === 'removed') {
-        const line = `Property '${path}' was removed`;
-        return [...acc, line];
+      if (type === 'removed') {
+        return `Property '${path}' was removed`;
       }
-      if (condition === 'modified') {
-        const additionalValue = normalizeValue(getAdditionalValue(prop));
-        const line = `Property '${path}' was updated. From ${value} to ${additionalValue}`;
-        return [...acc, line];
+      if (type === 'modified') {
+        const additionalValue = normalizeValue(getAdditionalValue(child));
+        return `Property '${path}' was updated. From ${value} to ${additionalValue}`;
       }
-      if (condition === 'nested') {
-        const line = iter(value, path);
-        return [...acc, line];
+      if (type === 'parent') {
+        return iter(value, path);
       }
-      return [...acc];
-    }, []);
-    const result = lines.flat().join('\n');
+      return '';
+    });
+    const sortedLines = _.filter(lines, (line) => (line !== ''));
+    const result = sortedLines.flat().join('\n');
     return result;
   };
 

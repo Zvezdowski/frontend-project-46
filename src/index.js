@@ -19,40 +19,35 @@ const getUniqueKeys = (obj1, obj2) => {
   return sortedKeys;
 };
 
-const makeStructureOfDiff = (props) => ({ props });
+const makeStructureOfDiff = (children) => ({ children });
 
-const makeProp = (key, condition, mainValue, additionalValue = undefined) => {
+const makeChild = (key, type, mainValue, additionalValue = undefined) => {
   if (additionalValue !== undefined) {
     return {
-      key, condition, mainValue, additionalValue,
+      key, type, mainValue, additionalValue,
     };
   }
-  return { key, condition, mainValue };
+  return { key, type, mainValue };
 };
 
 const genStructureOfDiff = (obj1, obj2) => {
   const uniqueKeys = getUniqueKeys(obj1, obj2);
-  const props = uniqueKeys.reduce((acc, key) => {
+  const children = uniqueKeys.map((key) => {
     if (!Object.hasOwn(obj1, key)) {
-      const prop = makeProp(key, 'added', obj2[key]);
-      return [...acc, prop];
+      return makeChild(key, 'added', obj2[key]);
     }
     if (!Object.hasOwn(obj2, key)) {
-      const prop = makeProp(key, 'removed', obj1[key]);
-      return [...acc, prop];
+      return makeChild(key, 'removed', obj1[key]);
     }
     if (obj1[key] === obj2[key]) {
-      const prop = makeProp(key, 'unchanged', obj1[key]);
-      return [...acc, prop];
+      return makeChild(key, 'unchanged', obj1[key]);
     }
     if (isObject(obj1[key]) && isObject(obj2[key])) {
-      const prop = makeProp(key, 'nested', genStructureOfDiff(obj1[key], obj2[key]));
-      return [...acc, prop];
+      return makeChild(key, 'parent', genStructureOfDiff(obj1[key], obj2[key]));
     }
-    const prop = makeProp(key, 'modified', obj1[key], obj2[key]);
-    return [...acc, prop];
-  }, []);
-  const structureOfDiff = makeStructureOfDiff(props);
+    return makeChild(key, 'modified', obj1[key], obj2[key]);
+  });
+  const structureOfDiff = makeStructureOfDiff(children);
   return structureOfDiff;
 };
 

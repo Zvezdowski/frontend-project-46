@@ -1,37 +1,37 @@
 {
-  "props": [
+  "children": [
     {
       "key": "coach",
-      "condition": "removed",
+      "type": "removed",
       "mainValue": "Phil Jackson"
     },
     {
       "key": "roster",
-      "condition": "nested",
+      "type": "parent",
       "mainValue": {
-        "props": [
+        "children": [
           {
             "key": "center",
-            "condition": "removed",
+            "type": "removed",
             "mainValue": {
               "name": "Will Perdue"
             }
           },
           {
             "key": "pointGuard",
-            "condition": "added",
+            "type": "added",
             "mainValue": {
               "name": "Corey Williams"
             }
           },
           {
             "key": "powerForward",
-            "condition": "nested",
+            "type": "parent",
             "mainValue": {
-              "props": [
+              "children": [
                 {
                   "key": "name",
-                  "condition": "modified",
+                  "type": "modified",
                   "mainValue": "Scott Williams",
                   "additionalValue": "King Stacey"
                 }
@@ -40,17 +40,17 @@
           },
           {
             "key": "shootingGuard",
-            "condition": "nested",
+            "type": "parent",
             "mainValue": {
-              "props": [
+              "children": [
                 {
                   "key": "name",
-                  "condition": "unchanged",
+                  "type": "unchanged",
                   "mainValue": "Michael Jordan"
                 },
                 {
                   "key": "rings",
-                  "condition": "added",
+                  "type": "added",
                   "mainValue": 2
                 }
               ]
@@ -58,12 +58,12 @@
           },
           {
             "key": "smallForward",
-            "condition": "nested",
+            "type": "parent",
             "mainValue": {
-              "props": [
+              "children": [
                 {
                   "key": "name",
-                  "condition": "unchanged",
+                  "type": "unchanged",
                   "mainValue": "Scottie Pippen"
                 }
               ]
@@ -74,12 +74,12 @@
     },
     {
       "key": "team",
-      "condition": "unchanged",
+      "type": "unchanged",
       "mainValue": "Chicago Bulls"
     },
     {
       "key": "year",
-      "condition": "modified",
+      "type": "modified",
       "mainValue": "1991 - 1992",
       "additionalValue": "1992 - 1993"
     }

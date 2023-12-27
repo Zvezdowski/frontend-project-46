@@ -1,5 +1,5 @@
 import {
-  getProps, getCondition, getKey, getMainValue, getAdditionalValue, isObject,
+  getChildren, getType, getKey, getMainValue, getAdditionalValue, isObject,
 } from '../utils.js';
 
 const tab = '  ';
@@ -17,50 +17,51 @@ const printJsonObject = (object, depth) => {
   return `{\n${lines.join(',\n')}\n${tab.repeat(depth)}}`;
 };
 
-const printSimpleProp = (prop, depth) => {
-  const key = getKey(prop);
-  const condition = getCondition(prop);
-  const mainValue = getMainValue(prop);
+const printSimpleProp = (child, depth) => {
+  const key = getKey(child);
+  const type = getType(child);
+  const mainValue = getMainValue(child);
 
   const indentBeforeLine = tab.repeat(depth + 1);
   const indentBeforeBrace = tab.repeat(depth);
   const lineOfKey = `${indentBeforeLine}"key": "${key}"`;
-  const lineOfCondition = `${indentBeforeLine}"condition": "${condition}"`;
+  const lineOfType = `${indentBeforeLine}"type": "${type}"`;
   const lineOfMainValue = `${indentBeforeLine}"mainValue": ${printJsonObject(mainValue, depth + 1)}`;
 
-  if (condition === 'modified') {
-    const additionalValue = getAdditionalValue(prop);
+  if (type === 'modified') {
+    const additionalValue = getAdditionalValue(child);
     const lineOfAdditionalValue = `${indentBeforeLine}"additionalValue": ${printJsonObject(additionalValue)}`;
-    return `${indentBeforeBrace}{\n${lineOfKey},\n${lineOfCondition},\n${lineOfMainValue},\n${lineOfAdditionalValue}\n${indentBeforeBrace}}`;
+    return `${indentBeforeBrace}{\n${lineOfKey},\n${lineOfType},\n${lineOfMainValue},\n${lineOfAdditionalValue}\n${indentBeforeBrace}}`;
   }
 
-  return `${indentBeforeBrace}{\n${lineOfKey},\n${lineOfCondition},\n${lineOfMainValue}\n${indentBeforeBrace}}`;
+  return `${indentBeforeBrace}{\n${lineOfKey},\n${lineOfType},\n${lineOfMainValue}\n${indentBeforeBrace}}`;
 };
 
 const formatByJson = (diffStructure) => {
   const iter = (structure, depth) => {
     const indentBeforeBrace = tab.repeat(depth + 1);
-    const props = getProps(structure);
-    const lines = props.map((prop) => {
-      const condition = getCondition(prop);
-      if (condition === 'nested') {
-        const key = getKey(prop);
+    const children = getChildren(structure);
+    const lines = children.map((child) => {
+      const type = getType(child);
+      if (type === 'parent') {
+        const key = getKey(child);
         const indentBeforeLine = tab.repeat(depth + 2);
-        const mainValue = getMainValue(prop);
+        const mainValue = getMainValue(child);
         const lineOfKey = `${indentBeforeLine}"key": "${key}"`;
-        const lineOfCondition = `${indentBeforeLine}"condition": "${condition}"`;
+        const lineOfType = `${indentBeforeLine}"type": "${type}"`;
         const lineOfMainValue = `${indentBeforeLine}"mainValue": ${iter(mainValue, depth + 3)}`;
-        const nestedProp = `${indentBeforeBrace}{\n${lineOfKey},\n${lineOfCondition},\n${lineOfMainValue}\n${indentBeforeBrace}}`;
-        return nestedProp;
+        const parentProp = `${indentBeforeBrace}{\n${lineOfKey},\n${lineOfType},\n${lineOfMainValue}\n${indentBeforeBrace}}`;
+        return parentProp;
       }
-      const simpleProp = printSimpleProp(prop, depth + 1);
+      const simpleProp = printSimpleProp(child, depth + 1);
       return simpleProp;
     });
 
-    return `{\n${tab.repeat(depth)}"props": [\n${lines.join(',\n')}\n${tab.repeat(depth)}]\n${tab.repeat(depth - 1)}}`;
+    return `{\n${tab.repeat(depth)}"children": [\n${lines.join(',\n')}\n${tab.repeat(depth)}]\n${tab.repeat(depth - 1)}}`;
   };
 
   const result = iter(diffStructure, 1);
+  console.log(result);
   return result;
 };
 
