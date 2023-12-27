@@ -19,3 +19,6 @@
 
 ### Demo of gendiff utility with plain formatter on nested YAML
 [![asciicast](https://asciinema.org/a/e42WJ78OdRlbLTvWjdvYc0jOH.svg)](https://asciinema.org/a/e42WJ78OdRlbLTvWjdvYc0jOH)
+
+### Demo of gendiff utility with json formatter on nested JSON
+[![asciicast](https://asciinema.org/a/RemFSrhNlIxYSnQhVjyjXSib8.svg)](https://asciinema.org/a/RemFSrhNlIxYSnQhVjyjXSib8)
