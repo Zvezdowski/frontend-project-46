@@ -57,6 +57,8 @@ const genDiff = (filepath1, filepath2, style = 'stylish') => {
   return formatByStyle(diffStructure);
 };
 
+genDiff();
+
 export {
   genDiff, getFixturePath, genStructureOfDiff, getFormatterByStyle,
 };
