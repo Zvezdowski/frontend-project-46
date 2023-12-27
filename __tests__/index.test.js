@@ -1,8 +1,12 @@
 import fs from 'fs';
 import { genDiff, getFixturePath, genStructureOfDiff } from '../src/index.js';
 import formatByStylish from '../src/formatters/stylishFormatter.js';
-import { result2 } from '../__fixtures__/result.js';
 import result from '../__fixtures__/nested/result.js';
+
+test('genDiff json format on nested', () => {
+  const jsonOutput = fs.readFileSync(getFixturePath('nested/jsonFormatter/jsonOutput.txt')).toString().slice(0, -1);
+  expect(genDiff(getFixturePath('nested/jsonFormatter/file1.json'), getFixturePath('nested/jsonFormatter/file2.json'), 'json')).toBe(jsonOutput);
+});
 
 test('genDiff plain format on nested', () => {
   const defaultResult = fs.readFileSync(getFixturePath('nested/plainFormatter/defaultResult.txt')).toString().slice(0, -1);
@@ -16,8 +20,9 @@ test('genDiff stylish format on flat', () => {
   expect(genDiff(getFixturePath('terminalCases/before4.json'), getFixturePath('terminalCases/after4.json'))).toBe('{\n    apple: delicious\n  + banana: 1\n}');
   expect(genDiff(getFixturePath('terminalCases/before5.json'), getFixturePath('terminalCases/after5.json'))).toBe('{\n  + apple: delicious\n  + banana: 1\n}');
   expect(genDiff(getFixturePath('terminalCases/before6.json'), getFixturePath('terminalCases/after6.json'))).toBe('{\n  - apple: delicious\n  - banana: 1\n}');
-  expect(genDiff(getFixturePath('before.json'), getFixturePath('after.json'))).toBe(result2);
-  expect(genDiff(getFixturePath('before.yaml'), getFixturePath('after.yml'))).toBe(result2);
+  const flatResult = fs.readFileSync(getFixturePath('flat/result.txt')).toString().slice(0, -1);
+  expect(genDiff(getFixturePath('flat/before.json'), getFixturePath('flat/after.json'))).toBe(flatResult);
+  expect(genDiff(getFixturePath('flat/before.yaml'), getFixturePath('flat/after.yml'))).toBe(flatResult);
 });
 
 test('genDiff stylish format on nested', () => {

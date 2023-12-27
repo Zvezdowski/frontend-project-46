@@ -1,0 +1,19 @@
+{
+  "team": "Chicago Bulls",
+  "coach": "Phil Jackson",
+  "year": "1991 - 1992",
+  "roster": {
+    "center": {
+      "name": "Will Perdue"
+    },
+    "powerForward": {
+      "name": "Scott Williams"
+    },
+    "smallForward": {
+      "name": "Scottie Pippen"
+    },
+    "shootingGuard": {
+      "name": "Michael Jordan"
+    }
+  }
+}

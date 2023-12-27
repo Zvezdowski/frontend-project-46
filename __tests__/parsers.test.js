@@ -1,25 +1,26 @@
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import parseFile from '../src/parsers.js';
-import { result1 } from '../__fixtures__/result.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const getFixturePath = (fixtureName) => (`${__dirname}/../__fixtures__/${fixtureName}`);
 
+const result = { banana: 1, apple: 'delicious' };
+
 test('parse YAML', () => {
-  const fixtureName = 'blank.yaml';
-  expect(parseFile(getFixturePath(fixtureName))).toStrictEqual(result1);
+  const fixturePath = 'parsersFixtures/parserFixture.yaml';
+  expect(parseFile(getFixturePath(fixturePath))).toStrictEqual(result);
 });
 
 test('parse JSON', () => {
-  const fixtureName = 'blank.json';
-  expect(parseFile(getFixturePath(fixtureName))).toStrictEqual(result1);
+  const fixturePath = 'parsersFixtures/parserFixture.json';
+  expect(parseFile(getFixturePath(fixturePath))).toStrictEqual(result);
 });
 
 test('Switch default', () => {
-  const fixtureName = 'throw.error';
+  const fixtureName = 'parsersFixtures/throw.error';
   expect(() => {
     parseFile(getFixturePath(fixtureName));
   }).toThrow(new Error('Unknown extention'));

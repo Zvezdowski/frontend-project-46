@@ -1,0 +1,87 @@
+{
+  "props": [
+    {
+      "key": "coach",
+      "condition": "removed",
+      "mainValue": "Phil Jackson"
+    },
+    {
+      "key": "roster",
+      "condition": "nested",
+      "mainValue": {
+        "props": [
+          {
+            "key": "center",
+            "condition": "removed",
+            "mainValue": {
+              "name": "Will Perdue"
+            }
+          },
+          {
+            "key": "pointGuard",
+            "condition": "added",
+            "mainValue": {
+              "name": "Corey Williams"
+            }
+          },
+          {
+            "key": "powerForward",
+            "condition": "nested",
+            "mainValue": {
+              "props": [
+                {
+                  "key": "name",
+                  "condition": "modified",
+                  "mainValue": "Scott Williams",
+                  "additionalValue": "King Stacey"
+                }
+              ]
+            }
+          },
+          {
+            "key": "shootingGuard",
+            "condition": "nested",
+            "mainValue": {
+              "props": [
+                {
+                  "key": "name",
+                  "condition": "unchanged",
+                  "mainValue": "Michael Jordan"
+                },
+                {
+                  "key": "rings",
+                  "condition": "added",
+                  "mainValue": 2
+                }
+              ]
+            }
+          },
+          {
+            "key": "smallForward",
+            "condition": "nested",
+            "mainValue": {
+              "props": [
+                {
+                  "key": "name",
+                  "condition": "unchanged",
+                  "mainValue": "Scottie Pippen"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "key": "team",
+      "condition": "unchanged",
+      "mainValue": "Chicago Bulls"
+    },
+    {
+      "key": "year",
+      "condition": "modified",
+      "mainValue": "1991 - 1992",
+      "additionalValue": "1992 - 1993"
+    }
+  ]
+}

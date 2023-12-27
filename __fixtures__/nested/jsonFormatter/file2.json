@@ -1,0 +1,19 @@
+{
+  "team": "Chicago Bulls",
+  "year": "1992 - 1993",
+  "roster": {
+    "powerForward": {
+      "name": "King Stacey"
+    },
+    "smallForward": {
+      "name": "Scottie Pippen"
+    },
+    "shootingGuard": {
+      "name": "Michael Jordan",
+      "rings": 2
+    },
+    "pointGuard": {
+      "name": "Corey Williams"
+    }
+  }
+}
