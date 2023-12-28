@@ -9,7 +9,7 @@ Supports JSON and YAML input file extentions.
 
 `make install`
 
-### system requiirements
+### System requirements:
 node.js: v20.7.0
 
 ### Hexlet tests and linter status:
