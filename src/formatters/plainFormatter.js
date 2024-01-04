@@ -36,8 +36,8 @@ const formatByPlain = (diffStructure) => {
           throw new Error('Unknown type');
       }
     });
-    const sortedLines = _.filter(lines, (line) => (line !== ''));
-    return sortedLines.flat().join('\n');
+    const filteredLines = _.filter(lines, (line) => (line !== ''));
+    return filteredLines.flat().join('\n');
   };
   return iter(diffStructure, '');
 };

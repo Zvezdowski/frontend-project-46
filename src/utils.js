@@ -1,3 +1,14 @@
+import _ from 'lodash';
+
+const getUniqueKeys = (obj1, obj2) => {
+  const obj1Keys = Object.keys(obj1);
+  const obj2Keys = Object.keys(obj2);
+  const commonKeys = [...obj1Keys, ...obj2Keys];
+  const uniqueKeys = _.uniq(commonKeys);
+  const sortedKeys = _.sortBy(uniqueKeys);
+  return sortedKeys;
+};
+
 const getChildren = (diffStructure) => (diffStructure.children);
 
 const getType = (child) => (child.type);
@@ -16,5 +27,5 @@ const isObject = (value) => {
 };
 
 export {
-  getChildren, getType, getKey, getMainValue, getAdditionalValue, isObject,
+  getChildren, getType, getKey, getMainValue, getAdditionalValue, isObject, getUniqueKeys,
 };

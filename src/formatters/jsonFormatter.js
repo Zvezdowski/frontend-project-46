@@ -17,7 +17,7 @@ const printJsonObject = (object, depth) => {
   return `{\n${lines.join(',\n')}\n${tab.repeat(depth)}}`;
 };
 
-const printSimpleProp = (child, depth) => {
+const printRootObject = (child, depth) => {
   const key = getKey(child);
   const type = getType(child);
   const mainValue = getMainValue(child);
@@ -50,11 +50,11 @@ const formatByJson = (diffStructure) => {
         const lineOfKey = `${indentBeforeLine}"key": "${key}"`;
         const lineOfType = `${indentBeforeLine}"type": "${type}"`;
         const lineOfMainValue = `${indentBeforeLine}"mainValue": ${iter(mainValue, depth + 3)}`;
-        const parentProp = `${indentBeforeBrace}{\n${lineOfKey},\n${lineOfType},\n${lineOfMainValue}\n${indentBeforeBrace}}`;
-        return parentProp;
+        const parentObject = `${indentBeforeBrace}{\n${lineOfKey},\n${lineOfType},\n${lineOfMainValue}\n${indentBeforeBrace}}`;
+        return parentObject;
       }
-      const simpleProp = printSimpleProp(child, depth + 1);
-      return simpleProp;
+      const rootObject = printRootObject(child, depth + 1);
+      return rootObject;
     });
 
     return `{\n${tab.repeat(depth)}"children": [\n${lines.join(',\n')}\n${tab.repeat(depth)}]\n${tab.repeat(depth - 1)}}`;

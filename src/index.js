@@ -1,23 +1,13 @@
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import _ from 'lodash';
 import parseFile from './parsers.js';
 import getFormatterByStyle from './formatters/index.js';
-import { isObject } from './utils.js';
+import { isObject, getUniqueKeys } from './utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const getFixturePath = (fixtureName) => (`${__dirname}/../__fixtures__/${fixtureName}`);
-
-const getUniqueKeys = (obj1, obj2) => {
-  const obj1Keys = Object.keys(obj1);
-  const obj2Keys = Object.keys(obj2);
-  const commonKeys = [...obj1Keys, ...obj2Keys];
-  const uniqueKeys = _.uniq(commonKeys);
-  const sortedKeys = _.sortBy(uniqueKeys);
-  return sortedKeys;
-};
 
 const makeStructureOfDiff = (children) => ({ children });
 
@@ -59,6 +49,6 @@ const genDiff = (filepath1, filepath2, style = 'stylish') => {
   return formatByStyle(diffStructure);
 };
 
-export { getFixturePath, genStructureOfDiff };
+export { getFixturePath, genStructureOfDiff, makeChild };
 
 export default genDiff;
