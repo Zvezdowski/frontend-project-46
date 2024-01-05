@@ -1,35 +1,32 @@
 import _ from 'lodash';
-import {
-  getChildren, getType, getKey, getMainValue, getAdditionalValue, isObject,
-} from '../utils.js';
+import { isObject } from '../buildTree.js';
 
 const genPathOfProp = (existingPath, newKey) => ([existingPath, newKey].filter((element) => element !== '').join('.'));
 
-const isDiffStructure = (value) => (Object.hasOwn(value, 'children'));
+const isDiffTree = (value) => (Object.hasOwn(value, 'children'));
 
 const normalizeValue = (value) => {
   const rawValue = typeof value === 'string' ? `'${value}'` : value;
-  const normalizedValue = isObject(rawValue) && !isDiffStructure(value) ? '[complex value]' : rawValue;
+  const normalizedValue = isObject(rawValue) && !isDiffTree(value) ? '[complex value]' : rawValue;
   return normalizedValue;
 };
 
-const formatByPlain = (diffStructure) => {
-  const iter = (structure, pathOfProp) => {
-    const children = getChildren(structure);
+const formatByPlain = (diffTree) => {
+  const iter = (tree, pathToProp) => {
+    const { children } = tree;
     const lines = children.map((child) => {
-      const type = getType(child);
-      const value = normalizeValue(getMainValue(child));
-      const key = getKey(child);
-      const path = genPathOfProp(pathOfProp, key);
+      const { key, type, mainValue } = child;
+      const value = normalizeValue(mainValue);
+      const currentPath = genPathOfProp(pathToProp, key);
       switch (type) {
         case 'added':
-          return `Property '${path}' was added with value: ${value}`;
+          return `Property '${currentPath}' was added with value: ${value}`;
         case 'removed':
-          return `Property '${path}' was removed`;
+          return `Property '${currentPath}' was removed`;
         case 'modified':
-          return `Property '${path}' was updated. From ${value} to ${normalizeValue(getAdditionalValue(child))}`;
+          return `Property '${currentPath}' was updated. From ${value} to ${normalizeValue(child.additionalValue)}`;
         case 'parent':
-          return iter(value, path);
+          return iter(value, currentPath);
         case 'unchanged':
           return '';
         default:
@@ -39,7 +36,7 @@ const formatByPlain = (diffStructure) => {
     const filteredLines = _.filter(lines, (line) => (line !== ''));
     return filteredLines.flat().join('\n');
   };
-  return iter(diffStructure, '');
+  return iter(diffTree, '');
 };
 
 export default formatByPlain;

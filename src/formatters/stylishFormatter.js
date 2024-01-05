@@ -1,8 +1,6 @@
-import {
-  getChildren, getType, getKey, getMainValue, getAdditionalValue, isObject,
-} from '../utils.js';
+import { isObject } from '../buildTree.js';
 
-const getMainSpecialChar = (type) => {
+const getSpecialChar = (type) => {
   if (type === 'added') {
     return '+';
   }
@@ -11,8 +9,6 @@ const getMainSpecialChar = (type) => {
   }
   return ' ';
 };
-
-const getAdditionalSpecialChar = () => ('+');
 
 const printValue = (object, depth) => {
   if (!isObject(object)) {
@@ -31,31 +27,30 @@ const makeIndent = (depth, specialChar) => {
   return indent;
 };
 
-const formatByStylish = (diffStructure) => {
-  const iter = (structure, depth) => {
-    const children = getChildren(structure);
+const formatByStylish = (diffTree) => {
+  const iter = (tree, depth) => {
+    const { children } = tree;
     const lines = children.reduce((acc, child) => {
-      const type = getType(child);
-      const key = getKey(child);
-      const specialChar = getMainSpecialChar(type);
+      const { type, key, mainValue } = child;
+      const specialChar = getSpecialChar(type);
       const indent = makeIndent(depth, specialChar);
-      const mainValue = getMainValue(child);
-      if (type === 'added' || type === 'removed' || type === 'unchanged') {
-        const line = `${indent}${key}: ${printValue(mainValue, depth + 1)}`;
-        return [...acc, line];
+      const mainLine = `${indent}${key}: ${printValue(mainValue, depth + 1)}`;
+      switch (type) {
+        case 'added':
+        case 'removed':
+        case 'unchanged':
+          return [...acc, mainLine];
+        case 'modified':
+          return [...acc, mainLine, `${makeIndent(depth, '+')}${key}: ${printValue(child.additionalValue, depth + 1)}`];
+        case 'parent':
+          return [...acc, `${indent}${key}: ${iter(mainValue, depth + 1)}`];
+        default:
+          throw new Error(`Unknown type: ${type}`);
       }
-      if (type === 'modified') {
-        const lineOfBefore = `${indent}${key}: ${printValue(mainValue, depth + 1)}`;
-        const lineOfAfter = `${makeIndent(depth, getAdditionalSpecialChar())}${key}: ${printValue(getAdditionalValue(child), depth + 1)}`;
-        return [...acc, lineOfBefore, lineOfAfter];
-      }
-
-      const line = `${indent}${key}: ${iter(mainValue, depth + 1)}`;
-      return [...acc, line];
     }, []);
     return `{\n${lines.join('\n')}\n${'    '.repeat(depth - 1)}}`;
   };
-  return iter(diffStructure, 1);
+  return iter(diffTree, 1);
 };
 
 export default formatByStylish;
