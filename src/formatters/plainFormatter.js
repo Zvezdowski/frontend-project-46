@@ -1,32 +1,23 @@
 import _ from 'lodash';
-import { isObject } from '../buildTree.js';
 
-const genPathOfProp = (existingPath, newKey) => ([existingPath, newKey].filter((element) => element !== '').join('.'));
-
-const isDiffTree = (value) => (Object.hasOwn(value, 'children'));
-
-const normalizeValue = (value) => {
-  const rawValue = typeof value === 'string' ? `'${value}'` : value;
-  const normalizedValue = isObject(rawValue) && !isDiffTree(value) ? '[complex value]' : rawValue;
-  return normalizedValue;
-};
+const stringify = (value) => JSON.stringify(value).replaceAll('"', '\'');
 
 const formatByPlain = (diffTree) => {
   const iter = (tree, pathToProp) => {
     const { children } = tree;
     const lines = children.map((child) => {
       const { key, type, mainValue } = child;
-      const value = normalizeValue(mainValue);
-      const currentPath = genPathOfProp(pathToProp, key);
+      const normalizedValue = typeof mainValue === 'object' ? '[complex value]' : stringify(mainValue);
+      const currentPath = _.filter([pathToProp, key], (prop) => prop !== '').join('.');
       switch (type) {
         case 'added':
-          return `Property '${currentPath}' was added with value: ${value}`;
+          return `Property '${currentPath}' was added with value: ${normalizedValue}`;
         case 'removed':
           return `Property '${currentPath}' was removed`;
         case 'modified':
-          return `Property '${currentPath}' was updated. From ${value} to ${normalizeValue(child.additionalValue)}`;
+          return `Property '${currentPath}' was updated. From ${normalizedValue} to ${stringify(child.additionalValue)}`;
         case 'parent':
-          return iter(value, currentPath);
+          return iter(mainValue, currentPath);
         case 'unchanged':
           return '';
         default:

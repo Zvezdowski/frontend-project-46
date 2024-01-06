@@ -1,5 +1,3 @@
-import { isObject } from '../buildTree.js';
-
 const getSpecialChar = (type) => {
   if (type === 'added') {
     return '+';
@@ -11,7 +9,7 @@ const getSpecialChar = (type) => {
 };
 
 const printValue = (object, depth) => {
-  if (!isObject(object)) {
+  if (typeof object !== 'object' || Array.isArray(object) || object === null) {
     return object;
   }
   const keys = Object.keys(object);

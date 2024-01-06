@@ -1,4 +1,4 @@
-import { dirname } from 'path';
+import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 import genDiff from '../src/index.js';
@@ -27,12 +27,16 @@ test('genDiff stylish', () => {
 
 test('parse YAML', () => {
   const fixturePath = 'parserFixture.yaml';
+  const extention = path.extname(fixturePath);
   const result = { banana: 1, apple: 'delicious' };
-  expect(parseFile(getFixturePath(fixturePath))).toStrictEqual(result);
+  const fixtureData = fs.readFileSync(getFixturePath(fixturePath));
+  expect(parseFile(fixtureData, extention)).toStrictEqual(result);
 });
 
 test('parse JSON', () => {
   const fixturePath = 'parserFixture.json';
+  const extention = path.extname(fixturePath);
   const result = { banana: 1, apple: 'delicious' };
-  expect(parseFile(getFixturePath(fixturePath))).toStrictEqual(result);
+  const fixtureData = fs.readFileSync(getFixturePath(fixturePath));
+  expect(parseFile(fixtureData, extention)).toStrictEqual(result);
 });
