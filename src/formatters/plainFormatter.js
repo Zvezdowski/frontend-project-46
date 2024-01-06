@@ -1,6 +1,9 @@
 import _ from 'lodash';
 
-const stringify = (value) => JSON.stringify(value).replaceAll('"', '\'');
+const stringify = (value) => {
+  const result = _.isPlainObject(value) ? '[complex value]' : JSON.stringify(value).replaceAll('"', '\'');
+  return result;
+};
 
 const formatByPlain = (diffTree) => {
   const iter = (tree, pathToProp) => {
