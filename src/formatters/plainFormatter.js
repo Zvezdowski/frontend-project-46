@@ -10,7 +10,7 @@ const formatByPlain = (diffTree) => {
     const { children } = tree;
     const lines = children.map((child) => {
       const { key, type, mainValue } = child;
-      const normalizedValue = _.isPlainObject(mainValue) ? '[complex value]' : stringify(mainValue);
+      const normalizedValue = stringify(mainValue);
       const currentPath = _.filter([pathToProp, key], (prop) => prop !== '').join('.');
       switch (type) {
         case 'added':
