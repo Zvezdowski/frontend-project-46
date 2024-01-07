@@ -1,5 +1,5 @@
 ### Difference generator utility
-Compares two JSON or YAML objects and shows the difference in stylish, plain or JSON format.
+Compares two JSON or YAML objects and shows the difference in stylish, plain or JSON output formats.
 
 ### How to install:
 
