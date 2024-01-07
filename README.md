@@ -1,7 +1,5 @@
 ### Difference generator utility
-Generates the difference between two structures.
-Stylish, Plain and Json output formats avialable.
-Supports JSON and YAML input file extentions.
+Compares two JSON or YAML objects and shows the difference in stylish, plain or JSON format.
 
 ### How to install:
 
@@ -12,14 +10,10 @@ Supports JSON and YAML input file extentions.
 ### System requirements:
 node.js: v20.7.0
 
-### Hexlet tests and linter status:
+### Status:
 [![Actions Status](https://github.com/Zvezdowski/frontend-project-46/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/Zvezdowski/frontend-project-46/actions)
-
-### Codeclimate Maintainability and Test Coverage status:
 [![Maintainability](https://api.codeclimate.com/v1/badges/cfef3796ef2b0b104188/maintainability)](https://codeclimate.com/github/Zvezdowski/frontend-project-46/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/cfef3796ef2b0b104188/test_coverage)](https://codeclimate.com/github/Zvezdowski/frontend-project-46/test_coverage)
-
-### Github Actions CI status:
 [![Node CI](https://github.com/Zvezdowski/frontend-project-46/actions/workflows/nodejs.yml/badge.svg)](https://github.com/Zvezdowski/frontend-project-46/actions)
 
 ### Demo of gendiff utility on JSON:
