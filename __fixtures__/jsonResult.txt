@@ -1,87 +1,116 @@
-{
-  "children": [
-    {
-      "key": "coach",
-      "type": "removed",
-      "mainValue": "Phil Jackson"
-    },
-    {
-      "key": "roster",
-      "type": "parent",
-      "mainValue": {
-        "children": [
+[
+  {
+    "key": "common",
+    "type": "parent",
+    "mainValue": [
+      {
+        "key": "follow",
+        "type": "added",
+        "mainValue": false
+      },
+      {
+        "key": "setting1",
+        "type": "unchanged",
+        "mainValue": "Value 1"
+      },
+      {
+        "key": "setting2",
+        "type": "removed",
+        "mainValue": 200
+      },
+      {
+        "key": "setting3",
+        "type": "modified",
+        "mainValue": true,
+        "additionalValue": null
+      },
+      {
+        "key": "setting4",
+        "type": "added",
+        "mainValue": "blah blah"
+      },
+      {
+        "key": "setting5",
+        "type": "added",
+        "mainValue": {
+          "key5": "value5"
+        }
+      },
+      {
+        "key": "setting6",
+        "type": "parent",
+        "mainValue": [
           {
-            "key": "center",
-            "type": "removed",
-            "mainValue": {
-              "name": "Will Perdue"
-            }
+            "key": "doge",
+            "type": "parent",
+            "mainValue": [
+              {
+                "key": "wow",
+                "type": "modified",
+                "mainValue": "",
+                "additionalValue": "so much"
+              }
+            ]
           },
           {
-            "key": "pointGuard",
+            "key": "key",
+            "type": "unchanged",
+            "mainValue": "value"
+          },
+          {
+            "key": "ops",
             "type": "added",
-            "mainValue": {
-              "name": "Corey Williams"
-            }
-          },
-          {
-            "key": "powerForward",
-            "type": "parent",
-            "mainValue": {
-              "children": [
-                {
-                  "key": "name",
-                  "type": "modified",
-                  "mainValue": "Scott Williams",
-                  "additionalValue": "King Stacey"
-                }
-              ]
-            }
-          },
-          {
-            "key": "shootingGuard",
-            "type": "parent",
-            "mainValue": {
-              "children": [
-                {
-                  "key": "name",
-                  "type": "unchanged",
-                  "mainValue": "Michael Jordan"
-                },
-                {
-                  "key": "rings",
-                  "type": "added",
-                  "mainValue": 2
-                }
-              ]
-            }
-          },
-          {
-            "key": "smallForward",
-            "type": "parent",
-            "mainValue": {
-              "children": [
-                {
-                  "key": "name",
-                  "type": "unchanged",
-                  "mainValue": "Scottie Pippen"
-                }
-              ]
-            }
+            "mainValue": "vops"
           }
         ]
       }
-    },
-    {
-      "key": "team",
-      "type": "unchanged",
-      "mainValue": "Chicago Bulls"
-    },
-    {
-      "key": "year",
-      "type": "modified",
-      "mainValue": "1991 - 1992",
-      "additionalValue": "1992 - 1993"
+    ]
+  },
+  {
+    "key": "group1",
+    "type": "parent",
+    "mainValue": [
+      {
+        "key": "baz",
+        "type": "modified",
+        "mainValue": "bas",
+        "additionalValue": "bars"
+      },
+      {
+        "key": "foo",
+        "type": "unchanged",
+        "mainValue": "bar"
+      },
+      {
+        "key": "nest",
+        "type": "modified",
+        "mainValue": {
+          "key": "value"
+        },
+        "additionalValue": "str"
+      }
+    ]
+  },
+  {
+    "key": "group2",
+    "type": "removed",
+    "mainValue": {
+      "abc": 12345,
+      "deep": {
+        "id": 45
+      }
     }
-  ]
-}
+  },
+  {
+    "key": "group3",
+    "type": "added",
+    "mainValue": {
+      "deep": {
+        "id": {
+          "number": 45
+        }
+      },
+      "fee": 100500
+    }
+  }
+]

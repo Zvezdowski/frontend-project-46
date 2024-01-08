@@ -21,7 +21,7 @@ const buildTree = (obj1, obj2) => {
       key, type: 'modified', mainValue: obj1[key], additionalValue: obj2[key],
     };
   });
-  return { children };
+  return children;
 };
 
 export default buildTree;

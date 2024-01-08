@@ -1,34 +1,43 @@
+import _ from 'lodash';
+
+const space = ' ';
+const spacesCountPerDepth = 4;
+const indentPerDepth = space.repeat(spacesCountPerDepth);
+
 const getSpecialChar = (type) => {
-  if (type === 'added') {
-    return '+';
+  switch (type) {
+    case 'added':
+      return '+';
+    case 'removed':
+    case 'modified':
+      return '-';
+    case 'unchanged':
+    case 'parent':
+      return space;
+    default:
+      throw new Error(`Unknown type: ${type}`);
   }
-  if (type === 'removed' || type === 'modified') {
-    return '-';
-  }
-  return ' ';
 };
 
 const printValue = (object, depth) => {
-  if (typeof object !== 'object' || Array.isArray(object) || object === null) {
+  if (!_.isPlainObject(object)) {
     return object;
   }
   const keys = Object.keys(object);
-  const indent = '    ';
-  const lines = keys.map((key) => (`${indent.repeat(depth)}${key}: ${printValue(object[key], depth + 1)}`));
-  const result = `{\n${lines.join('\n')}\n${indent.repeat(depth - 1)}}`;
+  const lines = keys.map((key) => (`${indentPerDepth.repeat(depth)}${key}: ${printValue(object[key], depth + 1)}`));
+  const result = `{\n${lines.join('\n')}\n${indentPerDepth.repeat(depth - 1)}}`;
   return result;
 };
 
 const makeIndent = (depth, specialChar) => {
-  const space = ' ';
-  const indent = `${space.repeat(4 * depth - 2)}${specialChar}${space}`;
+  const finalCharsCount = 2;
+  const indent = `${space.repeat(spacesCountPerDepth * depth - finalCharsCount)}${specialChar}${space}`;
   return indent;
 };
 
 const formatByStylish = (diffTree) => {
   const iter = (tree, depth) => {
-    const { children } = tree;
-    const lines = children.reduce((acc, child) => {
+    const lines = tree.reduce((acc, child) => {
       const { type, key, mainValue } = child;
       const specialChar = getSpecialChar(type);
       const indent = makeIndent(depth, specialChar);
@@ -46,7 +55,7 @@ const formatByStylish = (diffTree) => {
           throw new Error(`Unknown type: ${type}`);
       }
     }, []);
-    return `{\n${lines.join('\n')}\n${'    '.repeat(depth - 1)}}`;
+    return `{\n${lines.join('\n')}\n${space.repeat(spacesCountPerDepth).repeat(depth - 1)}}`;
   };
   return iter(diffTree, 1);
 };

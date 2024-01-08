@@ -7,8 +7,7 @@ const stringify = (value) => {
 
 const formatByPlain = (diffTree) => {
   const iter = (tree, pathToProp) => {
-    const { children } = tree;
-    const lines = children.map((child) => {
+    const lines = tree.map((child) => {
       const { key, type, mainValue } = child;
       const normalizedValue = stringify(mainValue);
       const currentPath = _.filter([pathToProp, key], (prop) => prop !== '').join('.');
@@ -27,8 +26,8 @@ const formatByPlain = (diffTree) => {
           throw new Error('Unknown type');
       }
     });
-    const filteredLines = _.filter(lines, (line) => (line !== ''));
-    return filteredLines.flat().join('\n');
+    const filteredLines = lines.filter((line) => line);
+    return filteredLines.join('\n');
   };
   return iter(diffTree, '');
 };
